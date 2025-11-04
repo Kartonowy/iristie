@@ -18,6 +18,8 @@ import { reactive, ref } from 'vue';
             hover.value = ho
             mousePosition.x = me.pageX
             mousePosition.y = me.pageY
+            // TODO: make it not clip outside the page
+            // so check if x/y + size is greater than winsize etc
     }
 </script>
 
@@ -42,10 +44,19 @@ import { reactive, ref } from 'vue';
             background: #444444;
             position: absolute;
             transition: all;
-            width: 20vw;
+            min-width: 20vw;
+            max-width: 60vw;
             display: flex;
             align-items: center;
             justify-content: flex-start;
             flex-flow: column;
+            line-height: 1;
+            padding: 2vmin;
+        }
+        .popup * {
+            margin: 1vmin;
+        }
+        .popup p {
+            line-height: 1.1;
         }
 </style>
