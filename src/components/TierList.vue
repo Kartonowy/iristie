@@ -38,7 +38,7 @@ onMounted(async () => {
     <div v-for="(value, key) of tiers" :class="key" class="row">
         <div class="tiermark">{{ key }}</div>
         <div class="items">
-            <Card v-for="card in value" :id="card.id" :src="card.src" :alt="card.alt" :short="card.short" />
+            <Card v-for="card in value" :id="card.id" :src="card.src" :alt="card.alt" :short="card.short" :series="card.series" />
         </div>
     </div>
 </template>
