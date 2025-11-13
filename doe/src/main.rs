@@ -1,16 +1,15 @@
 use std::{sync::{Arc, Mutex}};
 
-use scrypt::{password_hash::{self, PasswordVerifier}, Scrypt};
 use axum::{extract::State, http::StatusCode, response::IntoResponse, routing::{get, post}, Json, Router};
 use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 
-use crate::{auth::auth_pass, inserts::{delete, insert_into}};
+use crate::{auth::auth_pass, inserts::{delete, insert_into, update}};
 
 pub mod inserts;
 pub mod auth;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Card {
     alt: String,    // ALT always consists of character's name
     src: String,    // SRC meaning url to the image of the character
@@ -21,19 +20,19 @@ pub struct Card {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Keyring {
-    alt: String,
-    series: String
+pub struct Keyring<'a> {
+    alt: &'a str,
+    series: &'a str
 }
 
-impl Keyring {
+impl<'a> Keyring<'a> {
     pub fn from_card(card: &Card) -> Keyring {
         Keyring {
-            alt: card.alt.clone(),
-            series: card.series.clone()
+            alt: &card.alt,
+            series: &card.series
         }
     }
-    pub fn from(alt: String, series: String) -> Keyring {
+    pub fn from(alt: &'a str, series: &'a str) -> Keyring<'a> {
         Keyring { alt, series }
     }
 }
@@ -47,6 +46,7 @@ async fn main() -> Result<()> {
         .route("/print", get(get_cards))
         .route("/add", post(add_card))
         .route("/delete", post(delete_card))
+        .route("/update", post(update_card))
         .with_state(Arc::new(Mutex::new(conn)));
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:2299").await.unwrap();
@@ -110,7 +110,29 @@ async fn delete_card(State(state): State<Arc<Mutex<Connection>>>, Json(payload):
 
     let state = state.lock().expect("Poisoned");
 
-    match delete(&state, Keyring::from(payload.alt, payload.series)) {
+    match delete(&state, Keyring::from(&payload.alt, &payload.series)) {
+        Ok(_) => (StatusCode::OK, "OK").into_response(),
+        Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, format!("Couldn't insert into database {:?}", error)).into_response(), 
+    }
+}
+
+#[derive(Debug, Deserialize)]
+struct ReqU {
+    pass: String,
+    card: Card
+}
+
+
+async fn update_card(State(state): State<Arc<Mutex<Connection>>>, Json(payload): Json<ReqU>) -> impl IntoResponse {
+    if !auth_pass(payload.pass).is_ok() {
+        return (StatusCode::FORBIDDEN, "Failed password authorization").into_response()
+    }
+
+    let state = state.lock().expect("Poisoned");
+
+    let kr = Keyring::from(&payload.card.alt, &payload.card.series);
+
+    match update(&state, kr, payload.card.clone()) {
         Ok(_) => (StatusCode::OK, "OK").into_response(),
         Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, format!("Couldn't insert into database {:?}", error)).into_response(), 
     }
