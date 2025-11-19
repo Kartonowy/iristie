@@ -2,7 +2,6 @@ use rusqlite::Connection;
 
 use crate::{Card, Keyring};
 
-
 pub fn insert_into(conn: &Connection, card: Card) -> rusqlite::Result<usize> {
     conn.execute(
         "INSERT INTO card (alt, src, series, tier, short) VALUES (?1, ?2, ?3, ?4, ?5)",
@@ -20,7 +19,7 @@ pub fn update(conn: &Connection, key: Keyring, new_card: Card) -> rusqlite::Resu
     // IDEA: Add version control, where you can check what options were changed, why and when
     // smth like git
     //
-    // also check if info is right 
+    // also check if info is right
     conn.execute(
         "UPDATE card SET alt = ?1, src = ?2, series = ?3, tier = ?4, short = ?5 WHERE alt = ?6 AND series = ?7",
         (&new_card.alt, &new_card.src, &new_card.series, &new_card.tier, &new_card.short, &key.alt, &key.series),

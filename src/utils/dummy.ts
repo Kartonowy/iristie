@@ -1,3 +1,4 @@
+import axios from "axios";
 import type { CardType as Card }  from "./types";
 
 const dummy_cards: Card[] = [
@@ -35,8 +36,18 @@ const dummy_cards: Card[] = [
     }
 ];
 
-export const getCards: () => Promise<Card[]> = () => {
+export const _getCards: () => Promise<Card[]> = () => {
     return new Promise((resolve) => {
         return setTimeout(() => { resolve(dummy_cards); }, 1000)
+    })
+}
+export const getCards = () => {
+    return axios({
+        method: "get",
+        url: "/api/print"
+    })
+    .then((res) => {
+        console.log(res.data)
+        return res.data;
     })
 }

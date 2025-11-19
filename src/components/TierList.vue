@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, type Ref } from 'vue';
 import { getCards } from '../utils/dummy';
 import Card from './Card.vue';
-import type { CardType } from '../utils/types';
-
+import { DialogKind, type CardType } from '../utils/types';
+import CardDialog from './dialogs/CardDialog.vue';
+import Dialog from './Dialog.vue';
 
 
 const tiers: any = ref({
@@ -23,6 +24,7 @@ onMounted(async () => {
     let cards: CardType[] = []
     cards = await getCards()
 
+
     for(const card of cards) {
         tiers.value[card.tier].push(card)
     }
@@ -31,6 +33,13 @@ onMounted(async () => {
     
 })
 
+const ctxCard = ref();
+const showCD = ref(false);
+
+const setCtx = (card: CardType) => {
+    ctxCard.value = card
+    showCD.value = true;
+}
 
 </script>
 
@@ -38,9 +47,10 @@ onMounted(async () => {
     <div v-for="(value, key) of tiers" :class="key" class="row">
         <div class="tiermark">{{ key }}</div>
         <div class="items">
-            <Card v-for="card in value" :id="card.id" :src="card.src" :alt="card.alt" :short="card.short" :series="card.series" />
+            <Card v-for="(card, index) in value" :key="index" :card="card" :set-ctx="setCtx" />
         </div>
     </div>
+    <Dialog v-if="showCD" :dialog-kind="DialogKind.CardDialog" :ctx-card="ctxCard" :close="() => showCD = !showCD" />
 </template>
 
 <style scoped>

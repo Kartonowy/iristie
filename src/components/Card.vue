@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { reactive, ref, useTemplateRef } from 'vue';
+import type { CardType } from '../utils/types';
 
 const props = defineProps<{
-    id: string,
-    src: string,
-    alt: string,
-    short: string,
-    series: string
+    card: CardType,
+    setCtx: (card: CardType) => void
 }>()
 
 const popup = useTemplateRef("popup")
@@ -35,12 +33,11 @@ const handleHover = (me: MouseEvent, ho: boolean) => {
 
 <template>
     <!-- <div>{{ props.alt }}</div> -->
-    <img :src="props.src" :alt="props.alt" @mousemove.passive="(me) => handleHover(me, true)" @mouseleave="hover = false">
+    <img :src="props.card.src" :alt="props.card.alt" @click="setCtx(card)" @mousemove.passive="(me) => handleHover(me, true)" @mouseleave="hover = false" >
     <div v-if="hover" ref="popup" class="popup"
      :style="{'left':`${mousePosition.x}px`, 'top':`${mousePosition.y}px`}"
      >
-        <h3>{{ props.alt }}<span>{{ props.series }}</span></h3>
-        <!-- <p>{{ props.short }}</p> -->
+        <h3>{{ props.card.alt }}<span>{{ props.card.series }}</span></h3>
     </div>
 </template>
 
