@@ -21,7 +21,6 @@ const handleDelete = () => {
         }
     })
     .then((res) => {
-        console.log(res)
         props.close()
     })
 }

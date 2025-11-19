@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue';
-import { getCards } from '../utils/dummy';
+import { getCards } from '../utils/get';
 import Card from './Card.vue';
 import { DialogKind, type CardType } from '../utils/types';
 import CardDialog from './dialogs/CardDialog.vue';
@@ -29,8 +29,6 @@ onMounted(async () => {
         tiers.value[card.tier].push(card)
     }
 
-    console.log(tiers)
-    
 })
 
 const ctxCard = ref();

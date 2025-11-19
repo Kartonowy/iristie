@@ -44,7 +44,6 @@ const handleAdd = () => {
         },
     })
     .then((res) => {
-        console.log(res)
         props.close()
     })
 }

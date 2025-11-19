@@ -66,7 +66,6 @@ const handleEdit = () => {
         },
     })
     .then((res) => {
-        console.log(res)
         props.close()
     })
 }
@@ -78,6 +77,7 @@ const handleEdit = () => {
     <input type="text" name="alt" placeholder="name of the character" v-model="name">
     <input type="text" name="series" placeholder="series" v-model="series">
     <input type="text" name="src" placeholder="image url" v-model="image">
+<!--  TODO: replace image url with uploads to the server    -->
     <label>
         tier:
         <select name="tier" v-model="tier">

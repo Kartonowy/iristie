@@ -13,9 +13,7 @@ const close = () => {
 };
 
 const handleClick = async () => {
-    console.log(document.cookie)
     if (await cookieStore.get("Auth")) {
-        console.log("dih")
         dialogKind.value = DialogKind.AddDialog
     }
     dialogShown.value = !dialogShown.value
