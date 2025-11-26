@@ -43,7 +43,7 @@ const handleAdd = () => {
             short: short.value
         },
     })
-    .then((res) => {
+    .then((_) => {
         props.close()
     })
 }

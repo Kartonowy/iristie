@@ -3,8 +3,11 @@ import { onMounted, ref, type Ref } from 'vue';
 import { getCards } from '../utils/get';
 import Card from './Card.vue';
 import { DialogKind, type CardType } from '../utils/types';
-import CardDialog from './dialogs/CardDialog.vue';
 import Dialog from './Dialog.vue';
+
+const props = defineProps<{
+    search: string 
+}>();
 
 
 const tiers: any = ref({
@@ -45,7 +48,7 @@ const setCtx = (card: CardType) => {
     <div v-for="(value, key) of tiers" :class="key" class="row">
         <div class="tiermark">{{ key }}</div>
         <div class="items">
-            <Card v-for="(card, index) in value" :key="index" :card="card" :set-ctx="setCtx" />
+            <Card v-for="(card, index) in value.filter((e: CardType) => e.alt.includes(props.search) || e.series.includes(props.search))" :key="index" :card="card" :set-ctx="setCtx" />
         </div>
     </div>
     <Dialog v-if="showCD" :dialog-kind="DialogKind.CardDialog" :ctx-card="ctxCard" :close="() => showCD = !showCD" />

@@ -20,7 +20,10 @@ const sendAuth = () => {
     })
     .then((res) => {
         console.log(res)
-        cookieStore.set("Auth", "true")
+        cookieStore.set({
+            name: "Auth",
+            value: "true",
+        })
         props.close()
     })
 }
