@@ -37,8 +37,8 @@ const ck = (dk: DialogKind, ctx: CardType) => {
 <style scoped>
         .dialog {
             background-color: #383838;
-            border: 1px red solid;
-            position: absolute;
+            border: 1px #434343 solid;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);

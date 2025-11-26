@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import axios from 'axios';
-import { ref } from 'vue';
 import type { CardType } from '../../utils/types';
 
 
@@ -20,7 +19,7 @@ const handleDelete = () => {
             series: props.ctxCard.series
         }
     })
-    .then((res) => {
+    .then((_res) => {
         props.close()
     })
 }

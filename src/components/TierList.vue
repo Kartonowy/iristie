@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { getCards } from '../utils/get';
 import Card from './Card.vue';
 import { DialogKind, type CardType } from '../utils/types';
@@ -42,19 +42,39 @@ const setCtx = (card: CardType) => {
     showCD.value = true;
 }
 
+const clickOff = () => {
+    if (showCD) {
+        showCD.value = !showCD;
+    }
+}
+
 </script>
 
 <template>
     <div v-for="(value, key) of tiers" :class="key" class="row">
         <div class="tiermark">{{ key }}</div>
         <div class="items">
-            <Card v-for="(card, index) in value.filter((e: CardType) => e.alt.includes(props.search) || e.series.includes(props.search))" :key="index" :card="card" :set-ctx="setCtx" />
+            <Card
+                v-for="(card, index) in value.filter((e: CardType) => e.alt.includes(props.search) || e.series.includes(props.search))"
+                :key="index" :card="card" :set-ctx="setCtx" />
         </div>
     </div>
-    <Dialog v-if="showCD" :dialog-kind="DialogKind.CardDialog" :ctx-card="ctxCard" :close="() => showCD = !showCD" />
+    <div v-if="showCD" class="cover" @click="clickOff">
+
+        <Dialog :dialog-kind="DialogKind.CardDialog" :ctx-card="ctxCard"
+            :close="() => showCD = !showCD" />
+    </div>
 </template>
 
 <style scoped>
+.cover {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
 .row {
     width: calc(12 * 100px);
     display: flex;

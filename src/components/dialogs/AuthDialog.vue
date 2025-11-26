@@ -18,8 +18,7 @@ const sendAuth = () => {
             pass: pass.value
         },
     })
-    .then((res) => {
-        console.log(res)
+    .then((_res) => {
         cookieStore.set({
             name: "Auth",
             value: "true",

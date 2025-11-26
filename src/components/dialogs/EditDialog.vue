@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import axios from 'axios';
-import Card from '../Card.vue';
 import { ref } from 'vue';
 import type { CardType } from '../../utils/types';
 
@@ -65,7 +64,7 @@ const handleEdit = () => {
             short: short.value
         },
     })
-    .then((res) => {
+    .then((_res) => {
         props.close()
     })
 }

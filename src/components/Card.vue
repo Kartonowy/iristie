@@ -19,20 +19,17 @@ const mousePosition = reactive({
 const handleHover = (me: MouseEvent, ho: boolean) => {
     hover.value = ho
     const w = popup.value?.offsetWidth!
-    const h = popup.value?.offsetWidth!
+    // const h = popup.value?.offsetWidth!
     mousePosition.y = me.pageY
     if (me.pageX + w >= window.innerWidth) {
         mousePosition.x = me.pageX - w
     } else {
         mousePosition.x = me.pageX
     }
-    // TODO: make it not clip outside the page
-    // so check if x/y + size is greater than winsize etc
 }
 </script>
 
 <template>
-    <!-- <div>{{ props.alt }}</div> -->
     <img :src="props.card.src" :alt="props.card.alt" @click="setCtx(card)" @mousemove.passive="(me) => handleHover(me, true)" @mouseleave="hover = false" >
     <div v-if="hover" ref="popup" class="popup"
      :style="{'left':`${mousePosition.x}px`, 'top':`${mousePosition.y}px`}"
