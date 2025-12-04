@@ -32,8 +32,18 @@ const handleEdit = async () => {
 </script>
 
 <template>
-    <h1>{{ ctxCard.alt }}</h1>
-    <p>{{ ctxCard.short }}</p>
+    <div class="profile">
+        <div class="bio">
+            <img :src=ctxCard.src :alt=ctxCard.alt>
+            <div class="info">
+                <span class="name">{{ ctxCard.alt }}</span>
+                <span class="series">{{ ctxCard.series }}</span>
+            </div>
+        </div>
+        <div class="aboutme">
+            <p>{{ ctxCard.short }}</p>
+        </div>
+    </div>
     <div class="controls">
         <h6 @click="handleClose">delete</h6>
         <h6 @click="handleEdit">edit</h6>
@@ -42,6 +52,28 @@ const handleEdit = async () => {
 </template>
 
 <style scoped>
+    .profile {
+        display: flex;
+    }
+    .bio img {
+        width: 250px;
+    }
+    .info .name {
+        font-size: 1.3em;
+    }
+
+    .info .series {
+        color: #888888;
+    }
+    .aboutme {
+        padding-left: 2.5vw;
+        padding-right: 2.5vw;
+    }
+
+    .info {
+        display: flex;
+        flex-flow: wrap column;
+    }
     .controls {
         display: flex;
     }

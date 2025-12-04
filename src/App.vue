@@ -8,7 +8,7 @@ const search = ref("")
 </script>
 
 <template>
-  <h1>Tieren machen <Auth /> <input type="text" placeholder="search" v-model="search"> </h1>
+  <h2>Shikanoko's fictional character tierlist of great accuracy and wisdom <Auth /> <input type="text" placeholder="search" v-model="search"> </h2>
   <div>
     <TierList :search="search" />
   </div>

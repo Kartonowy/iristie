@@ -36,6 +36,7 @@ const ck = (dk: DialogKind, ctx: CardType) => {
 
 <style scoped>
         .dialog {
+            z-index: 15;
             background-color: #383838;
             border: 1px #434343 solid;
             position: fixed;

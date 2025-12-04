@@ -59,11 +59,8 @@ const clickOff = () => {
                 :key="index" :card="card" :set-ctx="setCtx" />
         </div>
     </div>
-    <div v-if="showCD" class="cover" @click="clickOff">
-
-        <Dialog :dialog-kind="DialogKind.CardDialog" :ctx-card="ctxCard"
-            :close="() => showCD = !showCD" />
-    </div>
+    <Dialog v-if="showCD" :dialog-kind="DialogKind.CardDialog" :ctx-card="ctxCard" :close="() => showCD = !showCD" />
+    <div v-if="showCD" class="cover" @click="clickOff" />
 </template>
 
 <style scoped>
