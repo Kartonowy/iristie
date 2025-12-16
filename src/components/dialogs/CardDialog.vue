@@ -81,5 +81,6 @@ const handleEdit = async () => {
     .controls h6 {
         padding-left: 2vmin;
         padding-right: 2vmin;
+        margin: 0;
     }
 </style>

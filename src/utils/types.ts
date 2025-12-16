@@ -13,5 +13,7 @@ export enum DialogKind {
     AddDialog,
     EditDialog,
     DeleteDialog,
-    CardDialog
+    CardDialog,
+    HelpDialog,
+    CalcDialog
 }

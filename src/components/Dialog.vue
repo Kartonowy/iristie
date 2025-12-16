@@ -6,6 +6,8 @@ import AuthDialog from './dialogs/AuthDialog.vue';
 import CardDialog from './dialogs/CardDialog.vue';
 import DeleteDialog from './dialogs/DeleteDialog.vue';
 import EditDialog from './dialogs/EditDialog.vue';
+import HelpDialog from './dialogs/HelpDialog.vue';
+import CalcDialog from './dialogs/CalcDialog.vue';
 
 
 const props = defineProps<{
@@ -31,6 +33,8 @@ const ck = (dk: DialogKind, ctx: CardType) => {
         <EditDialog v-if="dialogKind == DialogKind.EditDialog" :ctx-card="ctxCard!" :close="close" />
         <DeleteDialog v-if="dialogKind == DialogKind.DeleteDialog" :close="close" :ctx-card="ctxCard!" />
         <CardDialog v-if="dialogKind == DialogKind.CardDialog" :close="close" :ctx-card="ctxCard!" :change-dialog="ck" />
+        <HelpDialog v-if="dialogKind == DialogKind.HelpDialog" :close="close" />
+        <CalcDialog v-if="dialogKind == DialogKind.CalcDialog" :close="close" />
     </div>
 </template>
 
