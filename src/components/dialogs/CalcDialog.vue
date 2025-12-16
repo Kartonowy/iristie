@@ -7,7 +7,7 @@ const lore = ref(0);
 const design = ref(0);
 const role = ref(0);
 
-const props = defineProps<{
+defineProps<{
     close: () => void
 }>();
 
