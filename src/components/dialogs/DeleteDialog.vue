@@ -4,6 +4,7 @@ import type { CardType } from '../../utils/types';
 import { DialogKind } from '../../utils/types';
 
 const props = defineProps<{
+    board: number
     changeDialog: (dk: DialogKind) => void
     ctxCard: CardType
 }>();
@@ -16,8 +17,12 @@ const handleDelete = () => {
         url: "/api/delete",
         data: {
             alt: props.ctxCard.alt,
-            series: props.ctxCard.series
-        }
+            series: props.ctxCard.series,
+            board_id: props.board
+        },
+        headers: {
+            Authorization: props.board
+        },
     })
     .then((_res) => {
         props.changeDialog(DialogKind.None)

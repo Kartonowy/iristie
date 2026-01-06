@@ -37,7 +37,13 @@ const clickOff = () => {
     <Picker :change-board="(id) => { board_id = id; t?.update_cards(id); }" />
     <Auth :change-dialog="changeDialog" />
   </h2>
-  <Dialog v-if="dialog_kind != DialogKind.None" :dialog-kind="dialog_kind" :change-dialog="changeDialog" :change-ctx="changeCtxCard" :ctx-card="ctxCard!"  />
+  <Dialog v-if="dialog_kind != DialogKind.None" 
+          :dialog-kind="dialog_kind"
+          :change-dialog="changeDialog"
+          :change-ctx="changeCtxCard"
+          :ctx-card="ctxCard!"
+          :board="board_id"
+           />
   <div v-if="dialog_kind != DialogKind.None" class="cover" @click="clickOff" /> <!-- TODO: MOVE THIS TO DIALOG -->
   <div>
     <TierList :search="search" :change-dialog="changeDialog"  ref="tl" :change-ctx="changeCtxCard" />

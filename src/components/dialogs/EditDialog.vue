@@ -14,6 +14,7 @@ const tier = ref("")
 
 
 const props = defineProps<{
+    board: number
     ctxCard: CardType
     changeDialog: (dk: DialogKind) => void
 }>();
@@ -53,7 +54,11 @@ const handleEdit = () => {
             series: series.value,
             src: image.value,
             tier: tier.value,
-            short: short.value
+            short: short.value,
+            board_id: props.board
+        },
+        headers: {
+            Authorization: props.board
         },
     })
     .then((_res) => {

@@ -8,6 +8,7 @@ import EditDialog from './dialogs/EditDialog.vue';
 
 
 const props = defineProps<{
+    board: number,
     ctxCard?: CardType  
     dialogKind: DialogKind
     changeDialog: (dk: DialogKind) => void
@@ -23,10 +24,10 @@ const ck = (dk: DialogKind, ctx: CardType) => {
 
 <template>
     <div class="dialog">
-        <AuthDialog v-if="dialogKind == DialogKind.AuthDialog" :change-dialog="changeDialog" />
-        <AddDialog v-if="dialogKind == DialogKind.AddDialog" :change-dialog="changeDialog" />
-        <EditDialog v-if="dialogKind == DialogKind.EditDialog" :ctx-card="ctxCard!" :change-dialog="changeDialog" />
-        <DeleteDialog v-if="dialogKind == DialogKind.DeleteDialog" :change-dialog="changeDialog" :ctx-card="ctxCard!" />
+        <AuthDialog v-if="dialogKind == DialogKind.AuthDialog" :change-dialog="changeDialog" :board="board" />
+        <AddDialog v-if="dialogKind == DialogKind.AddDialog" :change-dialog="changeDialog" :board="board" />
+        <EditDialog v-if="dialogKind == DialogKind.EditDialog" :ctx-card="ctxCard!" :change-dialog="changeDialog" :board="board" />
+        <DeleteDialog v-if="dialogKind == DialogKind.DeleteDialog" :change-dialog="changeDialog" :ctx-card="ctxCard!" :board="board" />
         <CardDialog v-if="dialogKind == DialogKind.CardDialog" :ctx-card="ctxCard!" :change-dialog="ck" />
     </div>
 </template>

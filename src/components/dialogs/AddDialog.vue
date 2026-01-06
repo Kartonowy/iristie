@@ -13,6 +13,7 @@ import { ref } from 'vue';
 
 import { DialogKind } from '../../utils/types';
 const props = defineProps<{
+    board: number
     changeDialog: (dk: DialogKind) => void
 }>();
 const name = ref("")
@@ -40,8 +41,12 @@ const handleAdd = () => {
             series: series.value,
             src: image.value,
             tier: tier.value,
-            short: short.value
+            short: short.value,
+            board_id: props.board
         },
+        headers: {
+            Authorization: props.board
+        }
     })
     .then((_) => {
         props.changeDialog(DialogKind.None)

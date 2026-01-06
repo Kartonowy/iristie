@@ -11,12 +11,35 @@ use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 
 pub async fn auth(session: Session<SessionNullPool>, req: Request, next: Next) -> Result<Response, StatusCode> {
+
+    let board = match session.get::<u32>("board") {
+        Some(b) => b,
+        None => {
+            return Err(StatusCode::UNAUTHORIZED)
+        }
+    };
+
+    let header = match req.headers().get("Authorization") {
+        Some(b) => match b.to_str().unwrap().parse::<u32>() {
+            Ok(e) => e,
+            Err(_) => { return Err(StatusCode::UNAUTHORIZED) }
+        },
+        None => {
+            return Err(StatusCode::UNAUTHORIZED)
+        }
+    };
     print!("Verifying if session exists: ");
-    if session.get("logged").unwrap_or(false) {
+    println!("Session: {}", board);
+    println!("Header Authorzation: {}", header);
+
+    if board == header {
         println!("Exists");
         return Ok(next.run(req).await)
     } 
+
+
     println!("Does not exist");
+
     Err(StatusCode::UNAUTHORIZED)
 }
 

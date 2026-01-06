@@ -121,7 +121,6 @@ async fn add_card(
 
     match insert_into(&state, payload) {
         Ok(_) => {
-
             (StatusCode::OK, "OK").into_response()
         },
         Err(error) => (
@@ -182,24 +181,39 @@ struct Auth {
 async fn auth_handler(State(state): State<Arc<Mutex<Connection>>>, session: Session<SessionNullPool>, Json(payload): Json<Auth>) -> impl IntoResponse {
     let state = state.lock().expect("Poisoned");
 
-    let mut stmt = state
-        .prepare("SELECT pass FROM boards")
-        .unwrap();
-    let card_iter = stmt
-        .query_map([], |row| {
-            Ok(row.get(0)?)
-        })
-        .unwrap();
-    let mut cards: Vec<String> = vec![];
-    for card in card_iter {
-        cards.push(card.unwrap());
+    if payload.id <= 0 {
+        return (StatusCode::NOT_FOUND, "what the hell is this board, id 0?? id -1??").into_response()
     }
 
+    let sql = format!("SELECT pass FROM boards WHERE rowid = {}", payload.id);
+    println!("{sql}");
 
-    if payload.pass == "teto" {
+    let mut stmt = state
+        .prepare(&sql)
+        .unwrap();
+    let mut rows = stmt.query([]).unwrap();
+    let mut names: Vec<String> = Vec::new();
+    while let Some(row) = rows.next().unwrap() {
+        names.push(row.get(0).unwrap());
+    }
+
+    // let card_iter = stmt
+    //     .query_map([], |row| {
+    //         Ok(row.get(0)?)
+    //     })
+    //     .unwrap();
+    // let mut cards: Vec<String> = vec![];
+    // for card in card_iter {
+    //     cards.push(card.unwrap());
+    // }
+
+    // println!("{:?}", cards);
+
+
+    if payload.pass == names[0] {
         print!("Password correct. Setting session... ");
-        session.set("logged", true);
-        println!("Session Set: {}", session.get("logged").unwrap_or("error".to_string()));
+        session.set("board", payload.id);
+        println!("Session Set: {}", session.get("board").unwrap_or(0));
         return (StatusCode::OK, "Logged in").into_response()
     }
     
