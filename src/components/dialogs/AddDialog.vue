@@ -12,6 +12,10 @@ import { ref } from 'vue';
 //     // TODO: source of the image?
 // }
 
+import { DialogKind } from '../../utils/types';
+const props = defineProps<{
+    changeDialog: (dk: DialogKind) => void
+}>();
 const name = ref("")
 const series = ref("")
 const short = ref("")
@@ -20,9 +24,6 @@ const tier = ref("")
 
 
 
-const props = defineProps<{
-    close: () => void
-}>();
 
 const handleAdd = () => {
     // const card: CardType = {
@@ -44,7 +45,7 @@ const handleAdd = () => {
         },
     })
     .then((_) => {
-        props.close()
+        props.changeDialog(DialogKind.None)
     })
 }
 

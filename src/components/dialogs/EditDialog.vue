@@ -2,16 +2,8 @@
 import axios from 'axios';
 import { ref } from 'vue';
 import type { CardType } from '../../utils/types';
+import { DialogKind } from '../../utils/types';
 
-//  export type CardType  = {
-//     id: number, // ID of the character for indexing purpose
-//     src: string, // SRC meaning url to the image of the character
-//     alt: string, // ALT always consists of character's name
-//     series: string, // SERIES for where the character comes from
-//     tier: string, // TIER for tier alignment purposes
-//     short: string // SHORT for short description of the character, reasoning behind its placement
-//     // TODO: source of the image?
-// }
 
 const name = ref("")
 const series = ref("")
@@ -23,7 +15,7 @@ const tier = ref("")
 
 const props = defineProps<{
     ctxCard: CardType
-    close: () => void
+    changeDialog: (dk: DialogKind) => void
 }>();
 
 name.value = props.ctxCard.alt
@@ -50,7 +42,7 @@ const handleEdit = () => {
         image.value == props.ctxCard.src &&
         tier.value == props.ctxCard.tier
     ) {
-        props.close()
+        props.changeDialog(DialogKind.None)
         return
     }
     axios({
@@ -65,7 +57,7 @@ const handleEdit = () => {
         },
     })
     .then((_res) => {
-        props.close()
+        props.changeDialog(DialogKind.None)
     })
 }
 

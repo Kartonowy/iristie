@@ -1,13 +1,29 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { getCards } from '../utils/get';
 import Card from './Card.vue';
 import { DialogKind, type CardType } from '../utils/types';
-import Dialog from './Dialog.vue';
 
 const props = defineProps<{
-    search: string 
+    search: string ,
+    changeDialog: (dk: DialogKind) => void
+    changeCtx: (cc: CardType) => void
 }>();
+
+const update_cards = async (bid: number) => {
+    let cards: CardType[] = []
+    cards = await getCards(bid)
+
+    console.log(bid)
+    for (const key of Object.keys(tiers.value)) {
+        tiers.value[key] = []
+    }
+
+    for(const card of cards) {
+        tiers.value[card.tier].push(card)
+    }
+}
+
 
 
 const tiers: any = ref({
@@ -22,31 +38,25 @@ const tiers: any = ref({
     "F": []
 })
 
-
-onMounted(async () => {
-    let cards: CardType[] = []
-    cards = await getCards()
-
-
-    for(const card of cards) {
-        tiers.value[card.tier].push(card)
-    }
-
-})
-
-const ctxCard = ref();
 const showCD = ref(false);
 
-const setCtx = (card: CardType) => {
-    ctxCard.value = card
+const setCtx = async (card: CardType) => {
+    // props.changeCtx(card)
+    props.changeCtx({...card})
     showCD.value = true;
+    props.changeDialog(DialogKind.CardDialog)
 }
 
 const clickOff = () => {
     if (showCD) {
         showCD.value = !showCD;
+        props.changeDialog(DialogKind.None)
     }
 }
+
+defineExpose({
+    update_cards
+})
 
 </script>
 
@@ -59,8 +69,7 @@ const clickOff = () => {
                 :key="index" :card="card" :set-ctx="setCtx" />
         </div>
     </div>
-    <Dialog v-if="showCD" :dialog-kind="DialogKind.CardDialog" :ctx-card="ctxCard" :close="() => showCD = !showCD" />
-    <div v-if="showCD" class="cover" @click="clickOff" />
+    <div v-if="showCD" class="cover" @click="clickOff" /> <!-- TODO: MOVE THIS TO DIALOG -->
 </template>
 
 <style scoped>

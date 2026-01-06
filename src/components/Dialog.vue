@@ -1,40 +1,33 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { DialogKind, type CardType } from '../utils/types';
 import AddDialog from './dialogs/AddDialog.vue';
 import AuthDialog from './dialogs/AuthDialog.vue';
 import CardDialog from './dialogs/CardDialog.vue';
 import DeleteDialog from './dialogs/DeleteDialog.vue';
 import EditDialog from './dialogs/EditDialog.vue';
-import HelpDialog from './dialogs/HelpDialog.vue';
-import CalcDialog from './dialogs/CalcDialog.vue';
 
 
 const props = defineProps<{
     ctxCard?: CardType  
     dialogKind: DialogKind
-    close: () => void
+    changeDialog: (dk: DialogKind) => void
+    changeCtx: (cc: CardType) => void
 }>();
 
-const dialogKind = ref(props.dialogKind)
-const ctxCard = ref(props.ctxCard)
-
 const ck = (dk: DialogKind, ctx: CardType) => {
-    dialogKind.value = dk
-    ctxCard.value = ctx
+    props.changeDialog(dk)
+    props.changeCtx(ctx)
 }
 
 </script>
 
 <template>
     <div class="dialog">
-        <AuthDialog v-if="dialogKind == DialogKind.AuthDialog" :close="close" />
-        <AddDialog v-if="dialogKind == DialogKind.AddDialog" :close="close" />
-        <EditDialog v-if="dialogKind == DialogKind.EditDialog" :ctx-card="ctxCard!" :close="close" />
-        <DeleteDialog v-if="dialogKind == DialogKind.DeleteDialog" :close="close" :ctx-card="ctxCard!" />
-        <CardDialog v-if="dialogKind == DialogKind.CardDialog" :close="close" :ctx-card="ctxCard!" :change-dialog="ck" />
-        <HelpDialog v-if="dialogKind == DialogKind.HelpDialog" :close="close" />
-        <CalcDialog v-if="dialogKind == DialogKind.CalcDialog" :close="close" />
+        <AuthDialog v-if="dialogKind == DialogKind.AuthDialog" :change-dialog="changeDialog" />
+        <AddDialog v-if="dialogKind == DialogKind.AddDialog" :change-dialog="changeDialog" />
+        <EditDialog v-if="dialogKind == DialogKind.EditDialog" :ctx-card="ctxCard!" :change-dialog="changeDialog" />
+        <DeleteDialog v-if="dialogKind == DialogKind.DeleteDialog" :change-dialog="changeDialog" :ctx-card="ctxCard!" />
+        <CardDialog v-if="dialogKind == DialogKind.CardDialog" :ctx-card="ctxCard!" :change-dialog="ck" />
     </div>
 </template>
 

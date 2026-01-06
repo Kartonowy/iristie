@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import axios from 'axios';
 import type { CardType } from '../../utils/types';
-
+import { DialogKind } from '../../utils/types';
 
 const props = defineProps<{
-    close: () => void
+    changeDialog: (dk: DialogKind) => void
     ctxCard: CardType
 }>();
 
@@ -20,7 +20,7 @@ const handleDelete = () => {
         }
     })
     .then((_res) => {
-        props.close()
+        props.changeDialog(DialogKind.None)
     })
 }
 
@@ -30,7 +30,7 @@ const handleDelete = () => {
 <template>
     <h2>Are you sure you want to delete</h2>
     <button type="button" class="delete" @click="handleDelete">Delete</button>
-    <h6 @click="close">close</h6>
+    <h6 @click="changeDialog(DialogKind.None)">close</h6>
 </template>
 
 <style scoped>

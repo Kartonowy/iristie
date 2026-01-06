@@ -1,39 +1,15 @@
-use std::{collections::HashMap, vec};
+use std::{sync::{Arc, Mutex}, vec};
 
-use async_trait::async_trait;
 use axum::{
-    extract::Request,
+    extract::{Request, State},
     http::StatusCode,
     middleware::Next,
-    response::{Response, Result},
+    response::{IntoResponse, Response, Result},
 };
 use axum_session::{SessionNullPool, Session};
-use dotenv;
-use scrypt::{
-    Scrypt,
-    password_hash::{self, PasswordVerifier},
-};
+use rusqlite::Connection;
+use serde::{Deserialize, Serialize};
 
-pub fn auth_pass(pass: String) -> scrypt::password_hash::Result<()> {
-    dotenv::dotenv().ok();
-
-    let fromdot = dotenv::var("hash").unwrap();
-    let hasz = password_hash::PasswordHash::new(&fromdot).expect("Couldnt process hash");
-    Scrypt.verify_password(pass.as_bytes(), &hasz)
-}
-
-// pub async fn auth(req: Request, next: Next) -> Result<Response, StatusCode> {
-//     match cookie.get("Auth") {
-//         Some(cookie) => {
-//             if cookie.value() == "teto" {
-//                 Ok(next.run(req).await)
-//             } else {
-//                 Err(StatusCode::UNAUTHORIZED)
-//             }
-//         }
-//         None => Err(StatusCode::UNAUTHORIZED),
-//     }
-// }
 pub async fn auth(session: Session<SessionNullPool>, req: Request, next: Next) -> Result<Response, StatusCode> {
     print!("Verifying if session exists: ");
     if session.get("logged").unwrap_or(false) {
@@ -42,4 +18,31 @@ pub async fn auth(session: Session<SessionNullPool>, req: Request, next: Next) -
     } 
     println!("Does not exist");
     Err(StatusCode::UNAUTHORIZED)
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Board {
+    id: u32,
+    name: String,
+}
+
+
+pub async fn get_boards(State(state): State<Arc<Mutex<Connection>>>) -> impl IntoResponse {
+    let state = state.lock().expect("Poisoned: Couldn't place lock on conn");
+    let mut stmt = state
+        .prepare("SELECT name, rowid FROM boards")
+        .unwrap();
+    let card_iter = stmt
+        .query_map([], |row| {
+            Ok(Board {
+                name: row.get(0)?,
+                id: row.get(1)?,
+            })
+        })
+        .unwrap();
+    let mut cards = vec![];
+    for card in card_iter {
+        cards.push(card.unwrap());
+    }
+    (StatusCode::OK, serde_json::to_string(&cards).unwrap()).into_response()
 }

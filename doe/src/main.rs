@@ -3,7 +3,7 @@ use axum_session::{SessionConfig, SessionLayer, SessionNullPool, SessionStore, S
 use http::header::{AUTHORIZATION, SET_COOKIE};
 
 use axum::{
-    body::Body, extract::{Request, State}, http::{self, HeaderMap, Method, StatusCode}, middleware::{self, Next}, response::{AppendHeaders, IntoResponse, Response}, routing::{get, post}, Json, Router
+    extract::{Path, State}, http::{self, Method, StatusCode}, middleware, response::IntoResponse, routing::{get, post}, Json, Router
 };
 use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
@@ -11,7 +11,7 @@ use tower::ServiceBuilder;
 use tower_http::cors::{Any, CorsLayer};
 
 use crate::{
-    auth::auth,
+    auth::{auth, get_boards},
     inserts::{delete, insert_into, update},
 };
 
@@ -25,11 +25,12 @@ pub struct Card {
     series: String, // SERIES for where the character comes from
     tier: String,   // TIER for tier alignment purposes
     short: Option<String>, // SHORT for short description of the character, reasoning behind its placement
-                           // TODO: source of the image?
+    board_id: u32, // id of the board to support multiple boards
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Keyring<'a> {
+    board_id: u32,
     alt: &'a str,
     series: &'a str,
 }
@@ -37,12 +38,13 @@ pub struct Keyring<'a> {
 impl<'a> Keyring<'a> {
     pub fn from_card(card: &Card) -> Keyring {
         Keyring {
+            board_id: card.board_id,
             alt: &card.alt,
             series: &card.series,
         }
     }
-    pub fn from(alt: &'a str, series: &'a str) -> Keyring<'a> {
-        Keyring { alt, series }
+    pub fn from(board_id: u32, alt: &'a str, series: &'a str) -> Keyring<'a> {
+        Keyring { board_id, alt, series }
     }
 }
 
@@ -62,7 +64,8 @@ async fn main() -> Result<()> {
         .route_layer(middleware::from_fn(auth))
         .route("/", get(|| async { "Hello world" }))
         .route("/auth", post(auth_handler))
-        .route("/print", get(get_cards))
+        .route("/print/{id}", get(get_cards))
+        .route("/boards", get(get_boards))
         .with_state(Arc::new(Mutex::new(conn)))
         .layer(
             ServiceBuilder::new()
@@ -81,11 +84,11 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-async fn get_cards(State(state): State<Arc<Mutex<Connection>>>) -> impl IntoResponse {
+async fn get_cards(State(state): State<Arc<Mutex<Connection>>>, Path(path): Path<String>) -> impl IntoResponse {
     print!("Printing cards requested! ");
     let state = state.lock().expect("Poisoned: Couldn't place lock on conn");
     let mut stmt = state
-        .prepare("SELECT alt, src, series, tier, short FROM card")
+        .prepare(format!("SELECT alt, src, series, tier, short, board_id FROM card WHERE board_id = '{}'", path).as_str())
         .unwrap();
     let card_iter = stmt
         .query_map([], |row| {
@@ -95,6 +98,7 @@ async fn get_cards(State(state): State<Arc<Mutex<Connection>>>) -> impl IntoResp
                 series: row.get(2)?,
                 tier: row.get(3)?,
                 short: row.get(4)?,
+                board_id: row.get(5)?
             })
         })
         .unwrap();
@@ -130,6 +134,7 @@ async fn add_card(
 
 #[derive(Debug, Deserialize)]
 struct ReqR {
+    board_id: u32,
     alt: String,
     series: String,
 }
@@ -140,7 +145,7 @@ async fn delete_card(
 ) -> impl IntoResponse {
     let state = state.lock().expect("Poisoned");
 
-    match delete(&state, Keyring::from(&payload.alt, &payload.series)) {
+    match delete(&state, Keyring::from(payload.board_id, &payload.alt, &payload.series)) {
         Ok(_) => (StatusCode::OK, "OK").into_response(),
         Err(error) => (
             StatusCode::INTERNAL_SERVER_ERROR,
@@ -157,7 +162,7 @@ async fn update_card(
 ) -> impl IntoResponse {
     let state = state.lock().expect("Poisoned");
 
-    let kr = Keyring::from(&payload.alt, &payload.series);
+    let kr = Keyring::from_card(&payload);
 
     match update(&state, kr, payload.clone()) {
         Ok(_) => (StatusCode::OK, "OK").into_response(),
@@ -170,11 +175,27 @@ async fn update_card(
 }
 #[derive(Serialize, Deserialize, Debug)]
 struct Auth {
+    id: u32,
     pass: String
 }
 
-async fn auth_handler(session: Session<SessionNullPool>, Json(payload): Json<Auth>) -> impl IntoResponse {
-    println!("Checking password, got: {}", payload.pass);
+async fn auth_handler(State(state): State<Arc<Mutex<Connection>>>, session: Session<SessionNullPool>, Json(payload): Json<Auth>) -> impl IntoResponse {
+    let state = state.lock().expect("Poisoned");
+
+    let mut stmt = state
+        .prepare("SELECT pass FROM boards")
+        .unwrap();
+    let card_iter = stmt
+        .query_map([], |row| {
+            Ok(row.get(0)?)
+        })
+        .unwrap();
+    let mut cards: Vec<String> = vec![];
+    for card in card_iter {
+        cards.push(card.unwrap());
+    }
+
+
     if payload.pass == "teto" {
         print!("Password correct. Setting session... ");
         session.set("logged", true);

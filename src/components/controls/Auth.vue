@@ -1,22 +1,30 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import Dialog from '../Dialog.vue';
 import { DialogKind } from '../../utils/types';
 
 
+const props = defineProps<{
+    changeDialog: (dk: DialogKind) => void
+}>();
 
-const dialogShown = ref(false);
-const dialogKind = ref(DialogKind.AuthDialog)
+const vis = ref(false);
 
-const close = () => {
-    dialogShown.value = false;
-};
 
 const handleClick = async () => {
-    if (await cookieStore.get("Auth")) {
-        dialogKind.value = DialogKind.AddDialog
+    if (vis.value) {
+        props.changeDialog(DialogKind.None)
+        vis.value = false;
+        return;
     }
-    dialogShown.value = !dialogShown.value
+
+    if (await cookieStore.get("Auth")) {
+        props.changeDialog(DialogKind.AddDialog)
+        vis.value = true;
+    } else {
+        props.changeDialog(DialogKind.AuthDialog)
+        vis.value = true;
+    }
+
 }
 
 
@@ -24,7 +32,6 @@ const handleClick = async () => {
 
 <template>
     <button type="button" @click="handleClick" >+</button>
-    <Dialog v-if="dialogShown" :dialog-kind="dialogKind" :close="close" />
 </template>
 
 <style scoped>

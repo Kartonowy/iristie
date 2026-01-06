@@ -9,6 +9,7 @@ export type CardType  = {
 }
 
 export enum DialogKind {
+    None,
     AuthDialog,
     AddDialog,
     EditDialog,

@@ -1,9 +1,8 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import { DialogKind, type CardType } from '../../utils/types';
 
-
 const props = defineProps<{
-    close: () => void
     ctxCard: CardType
     changeDialog: (dk: DialogKind, ctx: CardType) => void
 }>();
@@ -29,12 +28,18 @@ const handleEdit = async () => {
     }
 }
 
+onMounted(()=> {
+    if (props.ctxCard == undefined) {
+        console.log("somethings wrong")
+    }
+})
+
 </script>
 
 <template>
-    <div class="profile">
+    <div class="profile" v-if="ctxCard">
         <div class="bio">
-            <img :src=ctxCard.src :alt=ctxCard.alt>
+            <img :src="ctxCard.src||'#'" :alt=ctxCard.alt>
             <div class="info">
                 <span class="name">{{ ctxCard.alt }}</span>
                 <span class="series">{{ ctxCard.series }}</span>
@@ -47,7 +52,7 @@ const handleEdit = async () => {
     <div class="controls">
         <h6 @click="handleClose">delete</h6>
         <h6 @click="handleEdit">edit</h6>
-        <h6 @click="close">close</h6>
+        <h6 @click="changeDialog(DialogKind.None, ctxCard)">close</h6>
     </div>
 </template>
 
