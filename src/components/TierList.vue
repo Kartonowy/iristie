@@ -38,21 +38,13 @@ const tiers: any = ref({
     "F": []
 })
 
-const showCD = ref(false);
 
 const setCtx = async (card: CardType) => {
     // props.changeCtx(card)
     props.changeCtx({...card})
-    showCD.value = true;
     props.changeDialog(DialogKind.CardDialog)
 }
 
-const clickOff = () => {
-    if (showCD) {
-        showCD.value = !showCD;
-        props.changeDialog(DialogKind.None)
-    }
-}
 
 defineExpose({
     update_cards
@@ -69,18 +61,9 @@ defineExpose({
                 :key="index" :card="card" :set-ctx="setCtx" />
         </div>
     </div>
-    <div v-if="showCD" class="cover" @click="clickOff" /> <!-- TODO: MOVE THIS TO DIALOG -->
 </template>
 
 <style scoped>
-.cover {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-}
 .row {
     width: calc(12 * 100px);
     display: flex;

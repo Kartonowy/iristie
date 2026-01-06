@@ -24,6 +24,10 @@ const changeCtxCard = (cc: CardType) => {
   console.log(ctxCard.value)
 }
 
+const clickOff = () => {
+  changeDialog(DialogKind.None)
+}
+
 
 </script>
 
@@ -34,10 +38,19 @@ const changeCtxCard = (cc: CardType) => {
     <Auth :change-dialog="changeDialog" />
   </h2>
   <Dialog v-if="dialog_kind != DialogKind.None" :dialog-kind="dialog_kind" :change-dialog="changeDialog" :change-ctx="changeCtxCard" :ctx-card="ctxCard!"  />
+  <div v-if="dialog_kind != DialogKind.None" class="cover" @click="clickOff" /> <!-- TODO: MOVE THIS TO DIALOG -->
   <div>
     <TierList :search="search" :change-dialog="changeDialog"  ref="tl" :change-ctx="changeCtxCard" />
   </div>
 </template>
 
 <style scoped>
+.cover {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
 </style>

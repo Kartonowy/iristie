@@ -9,7 +9,6 @@ import { ref } from 'vue';
 //     series: string, // SERIES for where the character comes from
 //     tier: string, // TIER for tier alignment purposes
 //     short: string // SHORT for short description of the character, reasoning behind its placement
-//     // TODO: source of the image?
 // }
 
 import { DialogKind } from '../../utils/types';
