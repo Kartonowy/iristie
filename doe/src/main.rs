@@ -36,7 +36,7 @@ pub struct Keyring<'a> {
 }
 
 impl<'a> Keyring<'a> {
-    pub fn from_card(card: &Card) -> Keyring {
+    pub fn from_card(card: &Card) -> Keyring<'_> {
         Keyring {
             board_id: card.board_id,
             alt: &card.alt,

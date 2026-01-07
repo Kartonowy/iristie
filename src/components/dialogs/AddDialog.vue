@@ -20,7 +20,7 @@ const name = ref("")
 const series = ref("")
 const short = ref("")
 const image = ref("")
-const tier = ref("")
+const tier = ref("SSS")
 
 
 

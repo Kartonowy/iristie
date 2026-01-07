@@ -9,7 +9,7 @@ const name = ref("")
 const series = ref("")
 const short = ref("")
 const image = ref("")
-const tier = ref("")
+const tier = ref("SSS")
 
 
 
@@ -70,9 +70,9 @@ const handleEdit = () => {
 </script>
 
 <template>
-    <input type="text" name="alt" placeholder="name of the character" v-model="name">
-    <input type="text" name="series" placeholder="series" v-model="series">
-    <input type="text" name="src" placeholder="image url" v-model="image">
+    <input type="text" name="alt" placeholder="name of the card" v-model="name" >
+    <input type="text" name="series" placeholder="category" v-model="series" >
+    <input type="text" name="src" placeholder="image url" v-model="image" >
 <!--  TODO: replace image url with uploads to the server    -->
     <label>
         tier:

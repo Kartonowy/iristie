@@ -8,7 +8,7 @@ const props = defineProps<{
 }>();
 
 const checkCookie = async () => {
-    if (await cookieStore.get("Auth")) {
+    if (await cookieStore.get("Board")) {
         return true;
     }
     alert("You don't have permission to do that.")

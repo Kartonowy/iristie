@@ -20,6 +20,16 @@ const handleChange = () => {
 
 onMounted(async () => {
     boards.value = await getBoards()
+    await cookieStore.get("Board")
+    .then((e) => {
+        let num = Number(e?.value)
+        props.changeBoard(num)
+        sel.value = num
+    })
+    .catch(() => {
+        props.changeBoard(1)
+        sel.value = 1
+    })
 })
 
 
@@ -27,7 +37,7 @@ onMounted(async () => {
 
 <template>
     <select @change="handleChange" v-model="sel">
-        <option v-for="board in boards" :value=board.id >{{ board.name }}</option>
+        <option v-for="board in boards" :value=board.id>{{ board.name }}</option>
     </select>
 </template>
 

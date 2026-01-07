@@ -17,7 +17,7 @@ const handleClick = async () => {
         return;
     }
 
-    if (await cookieStore.get("Auth")) {
+    if (await cookieStore.get("Board")) {
         props.changeDialog(DialogKind.AddDialog)
         vis.value = true;
     } else {

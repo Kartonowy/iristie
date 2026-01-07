@@ -24,8 +24,8 @@ const sendAuth = () => {
     })
     .then((_res) => {
         cookieStore.set({
-            name: "Auth",
-            value: `board${props.board}`,
+            name: "Board",
+            value: `${props.board}`,
         })
         props.changeDialog(DialogKind.None)
     })

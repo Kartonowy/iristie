@@ -14,14 +14,11 @@ const t = useTemplateRef("tl")
 
 
 const changeDialog = (dk: DialogKind) => {
-  console.log("changing from " + dialog_kind.value + " to " + dk)
   dialog_kind.value = dk
 }
 
 const changeCtxCard = (cc: CardType) => {
-  console.log("changing context")
   ctxCard.value = cc
-  console.log(ctxCard.value)
 }
 
 const clickOff = () => {

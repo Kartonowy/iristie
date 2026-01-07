@@ -14,12 +14,12 @@ const update_cards = async (bid: number) => {
     let cards: CardType[] = []
     cards = await getCards(bid)
 
-    console.log(bid)
     for (const key of Object.keys(tiers.value)) {
         tiers.value[key] = []
     }
 
     for(const card of cards) {
+        console.log(card.tier)
         tiers.value[card.tier].push(card)
     }
 }
