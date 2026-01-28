@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue';
 import { getBoards } from '../../utils/get';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
 const props = defineProps<{
-    changeBoard: (id: number) => void
+    changeBoard: (id: number) => void,
+    bel: number
 }>();
 
 type Board = {
@@ -12,24 +16,17 @@ type Board = {
 }
 
 const boards: Ref<Board[], Board[]> = ref([])
-const sel = ref(0)
+const sel = ref(props.bel)
 
 const handleChange = () => {
     props.changeBoard(sel.value)
+    const new_url = router.currentRoute.value.fullPath.replace(/\d/g, sel.value.toString())
+    router.replace(new_url)
 }
 
 onMounted(async () => {
     boards.value = await getBoards()
-    await cookieStore.get("Board")
-    .then((e) => {
-        let num = Number(e?.value)
-        props.changeBoard(num)
-        sel.value = num
-    })
-    .catch(() => {
-        props.changeBoard(1)
-        sel.value = 1
-    })
+    props.changeBoard(sel.value)
 })
 
 

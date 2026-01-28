@@ -88,7 +88,8 @@ async fn get_cards(State(state): State<Arc<Mutex<Connection>>>, Path(path): Path
     print!("Printing cards requested! ");
     let state = state.lock().expect("Poisoned: Couldn't place lock on conn");
     let mut stmt = state
-        .prepare(format!("SELECT alt, src, series, tier, short, board_id FROM card WHERE board_id = '{}'", path).as_str())
+        .prepare(format!("SELECT alt, src, series, tier, short, board_id FROM card WHERE board_id = '{}'
+                ORDER BY series, alt", path).as_str())
         .unwrap();
     let card_iter = stmt
         .query_map([], |row| {

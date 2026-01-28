@@ -19,7 +19,6 @@ const update_cards = async (bid: number) => {
     }
 
     for(const card of cards) {
-        console.log(card.tier)
         tiers.value[card.tier].push(card)
     }
 }
@@ -61,17 +60,26 @@ defineExpose({
                 :key="index" :card="card" :set-ctx="setCtx" />
         </div>
     </div>
+    <div class="stats">stats: {{ Object.values(tiers).map((e: any) => e.length).reduce((a: number, b: number) => a + b) }}</div>
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+IN+Guides&display=swap');
+.stats {
+    text-align: center;
+font-family: "Playwrite IN Guides", cursive;
+font-size: 4em;
+}
 .row {
-    width: calc(12 * 100px);
+    margin-left: 10vw;
+    margin-right: 10vw;
+    width: 80vw;
     display: flex;
     flex-wrap: wrap;
     align-self: flex-start;
 }
 .items {
-    width: calc(11 * 100px);
+    width: calc(80vw - 100px);
     display: flex;
     flex-wrap: wrap;
     align-self: flex-start;
@@ -83,32 +91,33 @@ defineExpose({
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #423939;
 }
 .SSS .tiermark {
-    background: linear-gradient(45deg, #d86f92 0%, #daef63 100% );
+    background: linear-gradient(-66.6deg,  #ff7f7f 0%, red 100% );
 }
 .SS .tiermark {
-    background-color: palevioletred;
+    background-color: #ff7f7f;
 }
 .S .tiermark {
-    background-color: red;
+    background-color: #ffbf7f;
 }
 .A .tiermark {
-    background-color: orange;
+    background-color: #ffdf7f;
 }
 .B .tiermark {
-    background-color: yellow;
+    background-color: #ffff7f;
 }
 .C .tiermark {
-    background-color: greenyellow;
+    background-color: #bfff7f;
 }
 .D .tiermark {
-    background-color: green;
+    background-color: #7fff7f;
 }
 .E .tiermark {
-    background-color: grey;
+    background-color: #7fffff;
 }
 .F .tiermark {
-    background-color: black;
+    background-color: #7fbfff;
 }
 </style>
