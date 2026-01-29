@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue';
-import { getBoards } from '../../utils/get';
+import { getBoards } from '../..//utils/get';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()

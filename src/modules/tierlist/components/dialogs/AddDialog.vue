@@ -37,11 +37,11 @@ const handleAdd = () => {
         method: "post",
         url: "/api/add",
         data: {
-            alt: name.value,
-            series: series.value,
-            src: image.value,
+            alt: name.value.trim(),
+            series: series.value.trim(),
+            src: image.value.trim(),
             tier: tier.value,
-            short: short.value,
+            short: short.value.trim(),
             board_id: props.board
         },
         headers: {
