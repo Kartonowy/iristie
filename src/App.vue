@@ -7,16 +7,10 @@
       <RouterLink to="/">Home</RouterLink>
     </h2>
     <h2>
-      <RouterLink to="/board/0">Tierlista</RouterLink>
+      <RouterLink to="/board/1">Tierlist</RouterLink>
     </h2>
     <h2>
-      <RouterLink to="/">Some other</RouterLink>
-    </h2>
-    <h2>
-      <RouterLink to="/">fun</RouterLink>
-    </h2>
-    <h2>
-      <RouterLink to="/">stuff</RouterLink>
+      <RouterLink to="/tracker">Tracker</RouterLink>
     </h2>
   </nav>
   <RouterView></RouterView>
