@@ -80,7 +80,7 @@ pub async fn get_boards(State(state): State<Arc<Mutex<Connection>>>) -> impl Int
 pub async fn auth_handler(State(state): State<Arc<Mutex<Connection>>>, session: Session<SessionNullPool>, Json(payload): Json<Auth>) -> impl IntoResponse {
     let state = state.lock().expect("Poisoned");
 
-    if payload.id <= 0 {
+    if payload.id == 0 {
         return (StatusCode::NOT_FOUND, "what the hell is this board, id 0?? id -1??").into_response()
     }
 

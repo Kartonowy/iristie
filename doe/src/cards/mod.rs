@@ -81,7 +81,6 @@ pub async fn get_cards(State(state): State<Arc<Mutex<Connection>>>, Path(path): 
     for card in card_iter {
         cards.push(card.unwrap());
     }
-    print!("Success\n");
 
     (StatusCode::OK, serde_json::to_string(&cards).unwrap()).into_response()
 }
