@@ -4,11 +4,18 @@ use axum::{
     extract::{Request, State},
     http::StatusCode,
     middleware::Next,
-    response::{IntoResponse, Response, Result},
+    response::{IntoResponse, Response, Result}, Json,
 };
 use axum_session::{SessionNullPool, Session};
 use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Auth {
+    id: u32,
+    pass: String
+}
+
 
 pub async fn auth(session: Session<SessionNullPool>, req: Request, next: Next) -> Result<Response, StatusCode> {
 
@@ -68,4 +75,33 @@ pub async fn get_boards(State(state): State<Arc<Mutex<Connection>>>) -> impl Int
         cards.push(card.unwrap());
     }
     (StatusCode::OK, serde_json::to_string(&cards).unwrap()).into_response()
+}
+
+pub async fn auth_handler(State(state): State<Arc<Mutex<Connection>>>, session: Session<SessionNullPool>, Json(payload): Json<Auth>) -> impl IntoResponse {
+    let state = state.lock().expect("Poisoned");
+
+    if payload.id <= 0 {
+        return (StatusCode::NOT_FOUND, "what the hell is this board, id 0?? id -1??").into_response()
+    }
+
+    let sql = format!("SELECT pass FROM boards WHERE rowid = {}", payload.id);
+    println!("{sql}");
+
+    let mut stmt = state
+        .prepare(&sql)
+        .unwrap();
+    let mut rows = stmt.query([]).unwrap();
+    let mut names: Vec<String> = Vec::new();
+    while let Some(row) = rows.next().unwrap() {
+        names.push(row.get(0).unwrap());
+    }
+
+    if payload.pass == names[0] {
+        print!("Password correct. Setting session... ");
+        session.set("board", payload.id);
+        println!("Session Set: {}", session.get("board").unwrap_or(0));
+        return (StatusCode::OK, "Logged in").into_response()
+    }
+    
+    (StatusCode::FORBIDDEN, "Wrong password bud").into_response()
 }
