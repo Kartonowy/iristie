@@ -3,8 +3,9 @@ import './style.css'
 import App from './App.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import TierPanel from './modules/tierlist/components/TierPanel.vue'
-import Home from './modules/home/components/Home.vue'
+import Home from './modules/home/Home.vue'
 import Tracker from './modules/tracker/components/Tracker.vue'
+import Pot from './modules/Pot/Pot.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -12,6 +13,7 @@ const router = createRouter({
         { path: '/', component: Home},
         { path: '/board/:board', component: TierPanel},
         { path: '/tracker/', component: Tracker},
+        { path: '/pot/', component: Pot}
     ]
 })
 
