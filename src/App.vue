@@ -12,6 +12,9 @@
     <h2>
       <RouterLink to="/tracker">Tracker</RouterLink>
     </h2>
+    <h2>
+      <RouterLink to="/pot">Pot</RouterLink>
+    </h2>
   </nav>
   <RouterView></RouterView>
 </template>
