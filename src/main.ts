@@ -5,7 +5,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TierPanel from './modules/tierlist/components/TierPanel.vue'
 import Home from './modules/home/Home.vue'
 import Tracker from './modules/tracker/components/Tracker.vue'
-import Pot from './modules/Pot/Pot.vue'
+import Pot from './modules/pot/Pot.vue'
 
 const router = createRouter({
     history: createWebHistory(),
