@@ -8,6 +8,7 @@ import { DialogKind, type CardType } from '../utils/types';
 import { useRoute } from 'vue-router';
 
 const search = ref("")
+const compact = ref(true)
 const board_id = ref(0)
 const dialog_kind = ref(DialogKind.None)
 const ctxCard: Ref<CardType | null, CardType | null> = ref(null)
@@ -18,7 +19,6 @@ const route = useRoute()
 const changeDialog = (dk: DialogKind) => {
   dialog_kind.value = dk
 }
-console.log(route.params.board)
 
 const changeCtxCard = (cc: CardType) => {
   ctxCard.value = cc
@@ -31,11 +31,14 @@ const clickOff = () => {
 </script>
 
 <template>
-  <h2>Shikanoko's fictional character tierlist of great accuracy and wisdom
+  <span id="topbar">
+    <Auth :change-dialog="changeDialog" />
     <input type="text" placeholder="search" v-model="search">
     <Picker :bel="Number(route.params.board)" :change-board="(id) => { board_id = id; t?.update_cards(id); }" />
-    <Auth :change-dialog="changeDialog" />
-  </h2>
+    <span id="compact">
+      Compact mode: <input type="checkbox" name="compact" v-model="compact">
+    </span>
+  </span>
   <Dialog v-if="dialog_kind != DialogKind.None" 
           :dialog-kind="dialog_kind"
           :change-dialog="changeDialog"
@@ -50,11 +53,16 @@ const clickOff = () => {
 </template>
 
 <style scoped>
-h2 {
-    text-align: center;
-    margin-left: 10vw;
-    margin-right: 10vw;
+#topbar {
+  display: flex;
+    justify-content: center;
+    margin: 2vh 10vw 2vh 10vw;
     width: 80vw;
+}
+#topbar * {
+  height: 80%;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 .cover {
     position: fixed;
