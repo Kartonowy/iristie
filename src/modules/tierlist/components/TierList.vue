@@ -5,7 +5,8 @@ import Card from './Card.vue';
 import { DialogKind, type CardType } from '../utils/types';
 
 const props = defineProps<{
-    search: string ,
+    search: string,
+    compact_mode: boolean,
     changeDialog: (dk: DialogKind) => void
     changeCtx: (cc: CardType) => void
 }>();
@@ -57,7 +58,7 @@ defineExpose({
         <div class="items">
             <Card
                 v-for="(card, index) in value.filter((e: CardType) => e.alt.includes(props.search) || e.series.includes(props.search))"
-                :key="index" :card="card" :set-ctx="setCtx" />
+                :key="index" :card="card" :set-ctx="setCtx" :compact_mode="compact_mode" />
         </div>
     </div>
     <div class="stats">stats: {{ Object.values(tiers).map((e: any) => e.length).reduce((a: number, b: number) => a + b) }}</div>

@@ -4,6 +4,7 @@ import type { CardType } from '../utils/types';
 
 const props = defineProps<{
     card: CardType,
+    compact_mode: boolean,
     setCtx: (card: CardType) => void
 }>()
 
@@ -30,7 +31,9 @@ const handleHover = (me: MouseEvent, ho: boolean) => {
 </script>
 
 <template>
-    <img :src="props.card.src" :alt="props.card.alt" @click="setCtx(card)" @mousemove.passive="(me) => handleHover(me, true)" @mouseleave="hover = false" >
+    <img :class="{
+        tiercardimg: compact_mode
+    }" :src="props.card.src" :alt="props.card.alt" @click="setCtx(card)" @mousemove.passive="(me) => handleHover(me, true)" @mouseleave="hover = false" >
     <div v-if="hover" ref="popup" class="popup"
      :style="{'left':`${mousePosition.x}px`, 'top':`${mousePosition.y}px`}"
      >
@@ -39,10 +42,12 @@ const handleHover = (me: MouseEvent, ho: boolean) => {
 </template>
 
 <style lang="css" scoped>
+.tiercardimg {
+    width: 100px;
+}
         img {
             object-fit: cover;
             object-position: center;
-            width: 100px;
             height: 150px;
         }
         .popup {

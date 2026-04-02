@@ -8,7 +8,7 @@ import { DialogKind, type CardType } from '../utils/types';
 import { useRoute } from 'vue-router';
 
 const search = ref("")
-const compact = ref(true)
+const compact_mode = ref(true)
 const board_id = ref(0)
 const dialog_kind = ref(DialogKind.None)
 const ctxCard: Ref<CardType | null, CardType | null> = ref(null)
@@ -36,7 +36,7 @@ const clickOff = () => {
     <input type="text" placeholder="search" v-model="search">
     <Picker :bel="Number(route.params.board)" :change-board="(id) => { board_id = id; t?.update_cards(id); }" />
     <span id="compact">
-      Compact mode: <input type="checkbox" name="compact" v-model="compact">
+      Compact mode: <input type="checkbox" name="compact" v-model="compact_mode">
     </span>
   </span>
   <Dialog v-if="dialog_kind != DialogKind.None" 
@@ -48,7 +48,7 @@ const clickOff = () => {
            />
   <div v-if="dialog_kind != DialogKind.None" class="cover" @click="clickOff" /> <!-- TODO: MOVE THIS TO DIALOG -->
   <div>
-    <TierList :search="search" :change-dialog="changeDialog"  ref="tl" :change-ctx="changeCtxCard" />
+    <TierList :search="search" :change-dialog="changeDialog"  ref="tl" :change-ctx="changeCtxCard" :compact_mode="compact_mode" />
   </div>
 </template>
 
