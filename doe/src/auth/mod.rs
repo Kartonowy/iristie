@@ -74,7 +74,7 @@ pub async fn get_boards(State(state): State<Arc<Mutex<Connection>>>) -> impl Int
     for card in card_iter {
         cards.push(card.unwrap());
     }
-    (StatusCode::OK, serde_json::to_string(&cards).unwrap()).into_response()
+    (StatusCode::OK, Json(&cards)).into_response()
 }
 
 pub async fn auth_handler(State(state): State<Arc<Mutex<Connection>>>, session: Session<SessionNullPool>, Json(payload): Json<Auth>) -> impl IntoResponse {

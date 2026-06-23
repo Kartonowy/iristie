@@ -10,11 +10,12 @@ use tower::ServiceBuilder;
 use tower_http::cors::{Any, CorsLayer};
 
 use crate::{
-    auth::{auth, auth_handler, get_boards}, cards::{add_card, delete_card, get_cards, update_card},
+    auth::{auth, auth_handler, get_boards}, tier_cards::{add_card, delete_card, get_cards, update_card},
 };
 
 pub mod auth;
-pub mod cards;
+pub mod tier_cards;
+// pub mod vault;
 
 
 #[tokio::main]

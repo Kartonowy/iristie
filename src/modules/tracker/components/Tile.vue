@@ -14,6 +14,10 @@ img {
     object-fit: cover;
     object-position: center;
     height: 250px;
-    width: 150px;
+    width: 146px;
+
+    border-top-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding: 2px 2px 2px 2px;
 }
 </style>

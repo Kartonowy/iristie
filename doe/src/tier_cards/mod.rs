@@ -1,11 +1,11 @@
 use std::sync::{Arc, Mutex};
 
-use axum::{extract::{Path, State}, http::StatusCode, response::IntoResponse, Json};
+use axum::{Json, extract::{Path, State}, http::{self, StatusCode}, response::IntoResponse};
 use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Card {
+pub struct TierCard {
     alt: String,    // ALT always consists of character's name
     src: String,    // SRC meaning url to the image of the character
     series: String, // SERIES for where the character comes from
@@ -22,7 +22,7 @@ pub struct Keyring<'a> {
 }
 
 impl<'a> Keyring<'a> {
-    pub fn from_card(card: &Card) -> Keyring<'_> {
+    pub fn from_card(card: &TierCard) -> Keyring<'_> {
         Keyring {
             board_id: card.board_id,
             alt: &card.alt,
@@ -34,7 +34,7 @@ impl<'a> Keyring<'a> {
     }
 }
 
-pub fn insert_into(conn: &Connection, card: Card) -> rusqlite::Result<usize> {
+pub fn insert_into(conn: &Connection, card: TierCard) -> rusqlite::Result<usize> {
     conn.execute(
         "INSERT INTO card (alt, src, series, tier, short, board_id) VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
         (&card.alt, &card.src, &card.series, &card.tier, &card.short, card.board_id),
@@ -46,7 +46,7 @@ pub fn delete(conn: &Connection, key: Keyring) -> rusqlite::Result<()> {
     Ok(())
 }
 
-pub fn update(conn: &Connection, key: Keyring, new_card: Card) -> rusqlite::Result<()> {
+pub fn update(conn: &Connection, key: Keyring, new_card: TierCard) -> rusqlite::Result<()> {
     // IDEA: Add version control, where you can check what options were changed, why and when
     // smth like git
     //
@@ -67,7 +67,7 @@ pub async fn get_cards(State(state): State<Arc<Mutex<Connection>>>, Path(path): 
         .unwrap();
     let card_iter = stmt
         .query_map([], |row| {
-            Ok(Card {
+            Ok(TierCard {
                 alt: row.get(0)?,
                 src: row.get(1)?,
                 series: row.get(2)?,
@@ -82,12 +82,12 @@ pub async fn get_cards(State(state): State<Arc<Mutex<Connection>>>, Path(path): 
         cards.push(card.unwrap());
     }
 
-    (StatusCode::OK, serde_json::to_string(&cards).unwrap()).into_response()
+    (StatusCode::OK, Json(&cards)).into_response()
 }
 
 pub async fn add_card(
     State(state): State<Arc<Mutex<Connection>>>,
-    Json(payload): Json<Card>,
+    Json(payload): Json<TierCard>,
 ) -> impl IntoResponse {
     let state = state.lock().expect("Poisoned");
     println!("Got request with body: {:?}", payload);
@@ -130,7 +130,7 @@ pub async fn delete_card(
 
 pub async fn update_card(
     State(state): State<Arc<Mutex<Connection>>>,
-    Json(payload): Json<Card>,
+    Json(payload): Json<TierCard>,
 ) -> impl IntoResponse {
     let state = state.lock().expect("Poisoned");
 
