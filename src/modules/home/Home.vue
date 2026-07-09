@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { getTrivia } from './utils/getTrivia';
 
 const carousel = ref("Homelabber")
+const trivia = ref("")
+
+const updateTrivia = async () => {
+    trivia.value = (await getTrivia()).text
+}
+
 
 const list = [
     "a Programmer",
@@ -23,6 +30,8 @@ setInterval(() => {
     index++
 }, 1000)
 
+onMounted(updateTrivia)
+
 </script>
 
 <template>
@@ -31,7 +40,7 @@ setInterval(() => {
 
         <section>
             <h2>Trivia of the day</h2>
-            <p>Hey guys, did you know that in terms of human companionship, Flareon is objectively the most huggable Pokémon? While their maximum temperature is likely too much for most, they are capable of controlling it, so they can set themselves to the perfect temperature for you. Along with that, they have a lot of fluff, making them undeniably incredibly soft to touch. But that's not all, they have a very respectable special defense stat of 110, which means that they are likely very calm and resistant to emotional damage.</p>
+            <p>{{ trivia }}</p>
         </section>
 
         <section>
