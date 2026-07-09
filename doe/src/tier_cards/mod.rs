@@ -34,7 +34,7 @@ impl<'a> Keyring<'a> {
     }
 }
 
-pub fn insert_into(conn: &Connection, card: TierCard) -> rusqlite::Result<usize> {
+fn insert_into(conn: &Connection, card: TierCard) -> rusqlite::Result<usize> {
     conn.execute(
         "INSERT INTO card (alt, src, series, tier, short, board_id) VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
         (&card.alt, &card.src, &card.series, &card.tier, &card.short, card.board_id),

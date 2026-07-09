@@ -11,11 +11,13 @@ use tower_http::cors::{Any, CorsLayer};
 
 use crate::{
     auth::{auth, auth_handler, get_boards}, tier_cards::{add_card, delete_card, get_cards, update_card},
+    low::{get_trivia}
 };
 
 pub mod auth;
 pub mod tier_cards;
 // pub mod vault;
+pub mod low;
 
 
 #[tokio::main]
@@ -32,6 +34,7 @@ async fn main() -> Result<()> {
         .route("/delete", post(delete_card))
         .route("/update", post(update_card))
         .route_layer(middleware::from_fn(auth))
+        .route("/trivia", get(get_trivia))
         .route("/", get(|| async { "Hello world" }))
         .route("/auth", post(auth_handler))
         .route("/print/{id}", get(get_cards))
