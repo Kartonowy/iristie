@@ -80,7 +80,11 @@ export const stuff: {
                 cover: "https://cdn.myanimelist.net/images/anime/1121/119044.jpg",
                 date: new Date("2026-06-16")
             },
-            
+            {
+                title: "Smoking Behind the Supermarket with You",
+                cover: "https://cdn.myanimelist.net/images/anime/1877/155018l.jpg",
+                date: new Date("2026-07-13")
+            },
         ]
     },
     shows: {
@@ -112,6 +116,16 @@ export const stuff: {
                 title: "Zima pod znakiem Wrony",
                 cover: "https://fwcdn.pl/fpo/50/82/10045082/8223581.10.webp",
                 date: new Date("2026-03-20")
+            },
+            {
+                title: "Iron Man",
+                cover: "https://fwcdn.pl/fpo/25/41/122541/7885686_1.10.webp",
+                date: new Date("2026-07-06")
+            },
+            {
+                title: "Captain America: The First Avenger",
+                cover: "https://fwcdn.pl/fpo/97/96/219796/7386143_1.10.webp",
+                date: new Date("2026-07-10")
             },
         ]
     },

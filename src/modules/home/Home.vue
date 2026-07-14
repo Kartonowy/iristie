@@ -69,7 +69,10 @@ onMounted(updateTrivia)
             <h2>Also check out</h2>
             <ul>
                 <li><a href="https://github.com/Kartonowy">My GitHub</a></li>
+                <li><a href="https://steamcommunity.com/id/zerothebitch">My Steam</a></li>
                 <li><a href="https://myanimelist.net/profile/NullZweiChan">My Anime List</a></li>
+                <li><a href="https://letterboxd.com/nullzweichan/">My Movies</a></li>
+                <li><a href="https://www.goodreads.com/user/show/148668363-karton">My Books</a></li>
                 <li><a href="https://moxfield.com/users/2BLover">My MTG decks</a></li>
                 <li><a href="https://myfigurecollection.net/profile/NullZweiChan">My Figure Collection</a></li>
                 <li><a href="https://discord.com/users/no2typeb">My Discord</a></li>
