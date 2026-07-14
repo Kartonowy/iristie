@@ -91,6 +91,9 @@ h1 {
 ul {
     list-style:none;
     line-height: 1.5rem;
+    display: flex;
+    flex-flow: wrap column;
+    height: 60%;
 }
 
 a {
