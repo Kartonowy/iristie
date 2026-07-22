@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { getTrivia } from './utils/getTrivia';
+import { getTrivia } from '../utils/getTrivia';
 
 const carousel = ref("Homelabber")
 const trivia = ref("")

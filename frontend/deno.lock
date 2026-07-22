@@ -5,6 +5,7 @@
     "npm:@vitejs/plugin-vue@^6.0.1": "6.0.7_vite@8.1.0__@types+node@24.13.2_vue@3.5.38__typescript@5.9.3_@types+node@24.13.2_typescript@5.9.3",
     "npm:@vue/tsconfig@~0.8.1": "0.8.1_typescript@5.9.3_vue@3.5.38__typescript@5.9.3",
     "npm:axios@^1.13.2": "1.18.1",
+    "npm:pinia@^4.0.2": "4.0.2_typescript@5.9.3_vue@3.5.38__typescript@5.9.3",
     "npm:typescript@~5.9.3": "5.9.3",
     "npm:vite@8": "8.1.0_@types+node@24.13.2",
     "npm:vue-router@4": "4.6.4_vue@3.5.38__typescript@5.9.3_typescript@5.9.3",
@@ -544,6 +545,9 @@
       "integrity": "sha512-y7Wygv/7mEOvxTuEQDB8StXdMRBWf1kR/tlhAzBRUFkB2jfcLOAxO/SHmOO2zgz1pVgK29/kyupn059/bCHdjA==",
       "bin": true
     },
+    "nostics@1.1.4": {
+      "integrity": "sha512-U4FApICSLCQ0dYiN59pxUCEZC053palQXi57yLaNdMaL6TBY4C4q3qZrJKUGcor2dGv8EhEwt8y5KvU2bo2kFg=="
+    },
     "path-browserify@1.0.1": {
       "integrity": "sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g=="
     },
@@ -552,6 +556,17 @@
     },
     "picomatch@4.0.4": {
       "integrity": "sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A=="
+    },
+    "pinia@4.0.2_typescript@5.9.3_vue@3.5.38__typescript@5.9.3": {
+      "integrity": "sha512-yKVVA7bSj5oRZFp/Ab9wLlmyb5gPUYEiIm4ryiWTe/xe7PtkRdMVOp1X1ggvq0c6Uj7Q0Du1HnV2mtAwM0Ks1g==",
+      "dependencies": [
+        "nostics",
+        "typescript",
+        "vue"
+      ],
+      "optionalPeers": [
+        "typescript"
+      ]
     },
     "postcss@8.5.15": {
       "integrity": "sha512-FfR8sjd4em2T6fb3I2MwAJU7HWVMr9zba+enmQeeWFfCbm+UOC/0X4DS8XtpUTMwWMGbjKYP7xjfNekzyGmB3A==",
@@ -668,6 +683,7 @@
         "npm:@vitejs/plugin-vue@^6.0.1",
         "npm:@vue/tsconfig@~0.8.1",
         "npm:axios@^1.13.2",
+        "npm:pinia@^4.0.2",
         "npm:typescript@~5.9.3",
         "npm:vite@8",
         "npm:vue-router@4",

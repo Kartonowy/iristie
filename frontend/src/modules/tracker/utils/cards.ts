@@ -159,6 +159,11 @@ export const stuff: {
                 cover: "https://myanimelist.net/images/manga/2/238873.jpg",
                 date: new Date("2026-03-31")
             },
+            {
+                title: "Jujutsu Kaisen",
+                cover: "https://cdn.myanimelist.net/images/manga/2/279716l.jpg",
+                date: new Date("2026-07-16")
+            },
         ]
     },
     games: {
